@@ -1,0 +1,28 @@
+# hive Java 오류 ( openjdk-11 기능 지원안됨현상 - hive 와 연동시 ? 정확히 모르겠움 )
+- java8 설치 
+
+- Java 11 제거 / javac 경로변경 
+apt remove openjdk-11-jdk
+unlink /usr/bin/javac
+ln -s /usr/lib/jvm/java-8-openjdk-amd64/ /usr/bin/javac
+readlink -f /usr/bin/javac ( 변경된 경로 확인)
+
+# 그 후에 생기는 java 오류
+오류명: Exception in thread "main" java.lang.IllegalArgumentException: java.net.URISyntaxException: Relative path in absolute URI: ${system:java.io.tmpdir%7D/$%7Bsystem:user.name%7D
+
+- 해결 방법
+hive/conf/hive-site.xml 파일을 아래처럼 수정한다.
+
+<name>hive.exec.scratchdir</name>
+<value>/tmp/hive-${user.name}</value>
+
+<name>hive.exec.local.scratchdir</name>
+ <value>/tmp/${user.name}</value>
+
+<name>hive.downloaded.resources.dir</name>
+ <value>/tmp/${user.name}_resources</value>
+
+<name>hive.scratch.dir.permission</name>
+ <value>733</value>
+
+참고 블로그:https://www.gooper.com/ss/?mid=bigdata&document_srl=3223

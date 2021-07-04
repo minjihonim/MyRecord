@@ -1,0 +1,24 @@
+# ERROR: Attempting to operate on hdfs namenode as root
+
+vi hadoop/etc/hadoop/hadoop-env.sh
+
+export HDFS_NAMENODE_USER=root
+export HDFS_DATANODE_USER=root
+export HDFS_SECONDARYNAMENODE_USER=root
+export YARN_RESOURCEMANAGER_USER=root
+export YARN_NODEMANAGER_USER=root
+
+source hadoop/etc/hadoop/hadoop-env.sh
+
+# pdsh@bee-VirtualBox: localhost: connect: Connection refused
+
+pdsh -q -w localhost 입력 후 Rcmd type 이 rsh 로 되어있다면
+
+vi hadoop/etc/hadoop/hadoop-env.sh 접속후 하단에 export PDSH_RCMD_TYPE=ssh
+추가후 wq 
+source hadoop/etc/hadoop/hadoop-env.sh
+다시 하둡실행
+
+# data node가 안올라올 시 
+- dfsdata에 datanode 폴더와 namenode의 폴더의 버전이 겹치지 못할 때 datanode가 jps에 올라오지 못한다.
+- 따라서 datanode 폴더를 지워주고 새로 만들어 namenode와 같게 만들어준다면 jps에 datanode 데몬이 생성된다.
