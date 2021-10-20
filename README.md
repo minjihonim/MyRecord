@@ -1,2 +1,0 @@
-# MyRecord
-Hello, World
